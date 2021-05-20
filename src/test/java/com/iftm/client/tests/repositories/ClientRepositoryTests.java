@@ -94,15 +94,20 @@ public class ClientRepositoryTests {
 	@Test
 	public void updateShouldChangeClientData() { 
 		
-		Optional<Client> cliente = repository.findById(1L);
+		Client cliente = ClientFactory.createClient();
 		
-		cliente.get().setName(nonExistingName);
-		cliente.get().setCpf(nonExistingCpf);
+		cliente.setName(nonExistingName);
+		cliente.setCpf(nonExistingCpf);
+		
+		cliente = repository.save(cliente);
 		
 		
-		Assertions.assertTrue(cliente.get().getName().equals(nonExistingName));
-		Assertions.assertTrue(cliente.get().getCpf().equals(nonExistingCpf));	
-		Assertions.assertTrue(cliente.get().getId().equals(1L));
+		Optional<Client> result = repository.findById(cliente.getId());
+	
+	
+		Assertions.assertTrue(result.get().getName().equals(nonExistingName));
+		Assertions.assertTrue(result.get().getCpf().equals(nonExistingCpf));	
+		Assertions.assertEquals(result.get().getId(),1L);
 	}
 	
 	//Testando se o Update lança exceção quando o Id não é encontrado
